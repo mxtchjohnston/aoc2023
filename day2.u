@@ -1,0 +1,11 @@
+day02.part1 : '{IO, Exception} ()
+day02.part1 = do submitSolution (Day 2) (Part 1) day02.solve1
+
+day02.solve1: Text -> Text
+day02.solve1 input =
+  input
+  |> Text.lines
+  |> List.map (Text.splitOn ":")
+---- Anything below this line is ignored by Unison.
+
+

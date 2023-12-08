@@ -1,0 +1,74 @@
+day01.part2 : '{IO, Exception} ()
+day01.part2 = do
+  solve input = day01.solve input
+  submitSolution (Day 1) (Part 2) solve
+
+day01.solve : Text -> Text
+day01.solve input = lines input |> List.map lineToNumber |> List.foldLeft (+) +0 |> Int.toText
+
+day01.lineToNumber : Text -> Int
+day01.lineToNumber line = 
+  first = day01.findFirst line
+  last  = day01.findLast line
+  optInt = Int.fromText (first ++ last)
+  Optional.getOrElse +0 optInt
+
+day01.findFirst : Text -> Text
+day01.findFirst input =
+  match Text.head input with
+    None -> ""
+    Some c ->
+      if isDigit c then Char.toText c
+      else
+        if startsWith "one" input then "1"
+        else
+          if startsWith "two" input then "2"
+          else
+            if startsWith "three" input then "3"
+            else
+              if startsWith "four" input then "4"
+              else
+                if startsWith "five" input then "5"
+                else
+                  if startsWith "six" input then "6"
+                  else
+                    if startsWith "seven" input then "7"
+                    else
+                      if startsWith "eight" input then "8"
+                      else
+                        if startsWith "nine" input then "9"
+                        else day01.findFirst (Text.drop 1 input)
+
+day01.findLast : Text -> Text
+day01.findLast input =
+  match 
+List.last
+ (toCharList input) with
+    None -> ""
+    Some c ->
+      if isDigit c then Char.toText c
+      else
+        if endsWith "one" input then "1"
+        else
+          if endsWith "two" input then "2"
+          else
+            if endsWith "three" input then "3"
+            else
+              if endsWith "four" input then "4"
+              else
+                if endsWith "five" input then "5"
+                else
+                  if endsWith "six" input then "6"
+                  else
+                    if endsWith "seven" input then "7"
+                    else
+                      if endsWith "eight" input then "8"
+                      else
+                        if endsWith "nine" input then "9"
+                        else
+                          day01.findLast
+                            (Text.take (Text.size input Nat.- 1) input)
+
+---- Anything below this line is ignored by Unison.
+
+

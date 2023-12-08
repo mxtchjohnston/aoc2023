@@ -1,0 +1,27 @@
+:q
+ui
+pull @stew/uniparsec/main lib.uniparsec
+push
+push mxtchjohnston.public.advent-of-code-2023 .advent-of-code-2023
+push.create mxtchjohnston.public.advent-of-code-2023 .advent-of-code-2023
+push.create mxtchjohnston.public.advent-of-code-2023 .advent-of-code-2023
+push.create mxtchjohnston.public.advent-of-code-2023 .advent-of-code-2023
+edit day02.part1
+run day01.part2
+update
+update
+view day01.part2
+update day01.part2
+add .
+run day01.part2
+:q
+q
+.q
+run day01.part2
+add 
+ui
+edit day01.part2
+pull @unison/advent-of-code/releases/latest
+ls
+pull @unison/advent-of-code/releases/lates
+project.create-empty advent-of-code-2023
