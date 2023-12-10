@@ -1,5 +1,7 @@
 :q
 ui
+:q
+ui
 pull @stew/uniparsec/main lib.uniparsec
 push
 push mxtchjohnston.public.advent-of-code-2023 .advent-of-code-2023
