@@ -162,7 +162,7 @@ const isSymbol = (char) => /[*=%&@$/+#-]/.test(char);
 
 const kernal = (x, y) => [{kx: x-1, ky: y-1}, {kx: x, ky: y-1}, {kx: x+1, ky: y-1}, {kx: x-1, ky: y}, {kx: x+1, ky: y}, {kx: x-1, ky: y+1}, {kx: x, ky: y+1}, {kx: x+1, ky: y+1}];
 
-const part1 = data => {
+const parseGrid = data => {
   const gridOfChars = data.split('\n').map(row => row.split(''));
   // {x: 0, y: 0, length: 0, value: 0, used: false}
   const numbers = [];
@@ -193,30 +193,56 @@ const part1 = data => {
       }
     });
   });
-  
-  
-  
-  let sum = 0
-
-  for (record of numbers) {
-    //const {xl, xr, y, value, used} = record;
-    if (isSymbol(record.value)) {
-      const k = kernal(record.xl, record.y);
-      k.forEach(({kx, ky}) => {
-        const found = numbers.find(f => !f.used && (f.xl <= kx && f.xr >= kx && f.y === ky));
-        if (found) {
-          found.used = true;
-          sum += found.value !== '#' ? found.value : 0;
-          //console.log('found', found);
-          console.log('remaining numbers', numbers.filter(f => !f.used));
-        }
-      });
-
-    }
-  }
-  console.log(sum);
-  return sum;
+  return numbers;
 }
 
-part1(data);
+const extractAdjacent = (numbers) => {
+  for (record of numbers) {
+    const {xl, xr, y, value, used} = record;
+    if (isSymbol(value)) {
+      const k = kernal(xl, y);
+      k.forEach(({kx, ky}) => {
+        const found = numbers.find(f => f.xl <= kx && f.xr >= kx && f.y === ky);
+        if (found) {
+          found.used = true;
+        }
+      });
+    }
+  }
+  return numbers;
+}
+
+const part1 = data => {
+  
+  const numbers = parseGrid(data);
+  //console.log(numbers);
+  const adjacent = extractAdjacent(numbers);
+  //console.log(adjacent);
+  const used = adjacent.filter(f => f.used).map(m => m.value);
+  //console.log(used); 
+
+  return used.reduce((acc, curr) => acc + curr, 0);
+}
+
+const part2 = data => {
+  const tokens = parseGrid(data);
+  //console.log(tokens);
+  const stars = tokens.filter(t => t.value === '*');
+  //console.log(stars);
+  const numbers = tokens.filter(t => !isNaN(t.value));
+  //console.log(numbers);
+  const gears = stars.map(star => {
+    const {xl, y} = star;
+    const k = kernal(xl, y);
+    k.forEach(({kx, ky}) => {
+      const found = numbers.filter(f => (f.xl <= kx && f.xr >= kx && f.y === ky));
+      console.log(found);
+      return found;
+    })
+  });
+  
+  return gears;
+}
+
+console.log(part2(exampleData));
 //console.log(matchAgainst(data.split('')));
