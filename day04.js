@@ -238,6 +238,18 @@ Set.prototype.intersection = function(set2) {
   return result;
 };
 
+Array.prototype.toLinkedList = function() {
+  const node = {val: null, next: null};
+  if (this.length === 0) {
+    return null;
+  } else {
+    node.val = this[0];
+    node.next = this.slice(1).toLinkedList();
+    return node;
+  }
+}
+
+
 const part1 = input => {
   const parsed = cards(input).map(parseCard);
   console.log(parsed);
@@ -247,5 +259,19 @@ const part1 = input => {
   return result.reduce((acc, curr) => acc + curr, 0);
 }
 
+const part2 = input => {
+  const parsed = cards(input).map(parseCard);
+  const info = parsed.map((card) => ({index: card.id - 1, num: card.left.intersection(card.right).size, amount: 1}));
+  info.forEach(({index, num, amount}) => {
+    for (let i = 0; i < amount; i++) {
+      for (let j = 0; j < num; j++) {
+        info[index + i].amount++;
+      }
+    }
+  });
+  console.log(info);
+  return info.reduce((acc, curr) => acc + curr.amount, 0);
+}
+
 //console.log(cards(exampleData).map(parseCard));
-console.log(part1(data));
+console.log(part2(exampleData));
