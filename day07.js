@@ -1063,7 +1063,7 @@ const calculateWinnings = hands => hands.map((hand, idx) => hand.bid * (idx + 1)
 
 const part1 = (data) => {
   const hands = parse(data).sort(sortingFunction);
-  console.log(hands);
+  console.log(hands[hands.length - 1]);
   return calculateWinnings(hands);
 }
 console.log(part1(data));
