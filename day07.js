@@ -1007,7 +1007,7 @@ Q8Q99 135
 3TKAA 717
 77484 391
 Q2K24 399
-Q7QQJ 572`
+Q7QQJ 572`;
 
 const parse = (data) => {
   const parseLine = line => {
@@ -1015,7 +1015,6 @@ const parse = (data) => {
     const intBid = parseInt(bid);
     return {hand, bid: intBid};
   };
-
 
   const categorize = (game) => {
     const map = new Map();
@@ -1030,10 +1029,41 @@ const parse = (data) => {
       }
     });
     return {hand, bid, map};
-
   };
-  const lines = data.split('\n').map(parseLine).map(categorize);
+
+  const calculateKind = (game) => {
+    const {map} = game;
+    const values = Array.from(map.values());
+    const kind = Math.max(...values);
+    return {kind, ...game};
+  };
+
+  const lines = data.split('\n').map(parseLine).map(categorize).map(calculateKind);
   return lines;
 }
 
-console.log(parse(exampleData));
+const sortingFunction = (a, b) => {
+  const strengths = '23456789TJQKA'.split('');
+  if (a.kind === b.kind) {
+    for (let i = 0; i < a.hand.length; i++) {
+      const aCard = a.hand[i];
+      const bCard = b.hand[i];
+      if (strengths.indexOf(aCard) > strengths.indexOf(bCard)) {
+        return 1;
+      } else if (strengths.indexOf(aCard) < strengths.indexOf(bCard)) {
+        return -1;
+      }
+    }
+  } else {
+    return a.kind - b.kind;
+  }
+};
+
+const calculateWinnings = hands => hands.map((hand, idx) => hand.bid * (idx + 1)).reduce((acc, el) => acc + el, 0);
+
+const part1 = (data) => {
+  const hands = parse(data).sort(sortingFunction);
+  console.log(hands);
+  return calculateWinnings(hands);
+}
+console.log(part1(data));
