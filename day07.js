@@ -1012,13 +1012,14 @@ Q7QQJ 572`
 const parse = (data) => {
   const parseLine = line => {
     const [hand, bid] = line.split(/\s+/);
-    return {hand, bid: parseInt(bid)};
+    const intBid = parseInt(bid);
+    return {hand, bid: intBid};
   };
 
 
   const categorize = (game) => {
     const map = new Map();
-    const {hand, _} = game;
+    const {hand, bid} = game;
     const cards = hand.split('');
 
     cards.forEach(card => {
@@ -1028,7 +1029,7 @@ const parse = (data) => {
         map.set(card, 1);
       }
     });
-
+    return {hand, bid, map};
 
   };
   const lines = data.split('\n').map(parseLine).map(categorize);
