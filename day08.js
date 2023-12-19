@@ -765,19 +765,37 @@ const cycleArray = function* (array) {
   }
 };
 
-const part1 = (data) => {
-  const {dir, map} = parse(data);
+const traverse = (map, start, dir) => {
   const state = cycleArray(dir);
+  let current = start;
   let steps = 0;
-  let current = 'AAA';
-  while (current !== 'ZZZ') {
-    const next = state.next().value;
+  while (current[2] !== 'Z') {
     const directions = map[current];
-    current = directions[next];
+    current = directions[state.next().value];
     steps++;
   }
   return steps;
 }
 
+const lcm = array => {
+  const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+  const _lcm = (a, b) => (Math.abs(a) * Math.abs(b)) / gcd(a, b);
+  return array.reduce((acc, next) => _lcm(acc, next), 1);
+}
+
+const part1 = (data) => {
+  const {dir, map} = parse(data);
+  return traverse(map, 'AAA', dir);
+}
+
+const part2 = (data) => {
+  const {dir, map} = parse(data);
+  const filtered = Object.keys(map).filter(key => key.endsWith('A'));
+
+  const steps = filtered.map(key => traverse(map, key, dir));
+  return lcm(steps);
+}
+
 console.log(part1(exampleData));
 console.log(part1(data));
+console.log(part2(data));
